@@ -2,24 +2,24 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Category;
 use App\Http\Controllers\Controller;
-use App\Http\Resources\AuthorCommentsResource;
-use App\Http\Resources\AuthorPostsResource;
-use App\Http\Resources\UserResource;
-use App\Http\Resources\UsersResource;
-use App\User;
+use App\Http\Resources\CategoriesResource;
+use App\Http\Resources\PostsResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
-class UserController extends Controller
+class CategoryController extends Controller
 {
     /**
-     * @return UsersResource
+     * Display a listing of the resource.
+     *
+     * @return Response
      */
     public function index()
     {
-        $users = User::paginate(env('AUTHORS_PER_PAGE'));
-        return new UsersResource($users);
+
+        return new  CategoriesResource(Category::paginate(env('CATEGORIES_PER_PAGE')));
         //
     }
 
@@ -35,13 +35,14 @@ class UserController extends Controller
     }
 
     /**
-     * @param $id
-     * @return UserResource
+     * Display the specified resource.
+     *
+     * @param int $id
+     * @return Response
      */
     public function show($id)
     {
-
-        return new UserResource(User::find($id));
+        //
     }
 
     /**
@@ -69,15 +70,8 @@ class UserController extends Controller
 
     public function posts($id)
     {
-        $user = User::find($id);
-        $posts = $user->posts()->paginate(env('POST_PER_PAGE'));
-        return new  AuthorPostsResource($posts);
-    }
-
-    public function comments($id)
-    {
-        $user = User::find($id);
-        $comments = $user->comments()->paginate(env('COMMENTS_PER_PAGE'));
-        return new AuthorCommentsResource($comments);
+        $category = Category::find($id);
+        $posts = $category->posts()->paginate(env('POSTS_PER_PAGE'));
+        return new PostsResource($posts);
     }
 }
