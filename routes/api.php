@@ -1,6 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -33,8 +32,9 @@ Route::get('posts/{id}', 'Api\PostController@show');
 Route::get('comments/posts/{id}', 'Api\postController@comments');
 //End Post Related
 Route::post('register', 'Api\UserController@store');
-Route::get('token', 'Api\userController@getToken');
+Route::post('token', 'Api\userController@getToken');
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+Route::middleware('auth:api')->group(function () {
+    Route::post('update-user/{id}', 'Api\UserController@update');
+}
+);
